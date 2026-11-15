@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Мяу-Арена">
+<meta name="theme-color" content="#24105a">
+<title>Мяу-Арена</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="assets/cat-sounds.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-paw" viewBox="0 0 24 24"><g fill="currentColor"><ellipse cx="12" cy="16" rx="5.6" ry="4.6"/><circle cx="4.8" cy="10.6" r="2.3"/><circle cx="9.3" cy="6.4" r="2.5"/><circle cx="14.7" cy="6.4" r="2.5"/><circle cx="19.2" cy="10.6" r="2.3"/></g></symbol>
+  <symbol id="i-fish" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#4cc9ff"/><path fill="#fff" d="M4.5 12c2.2-3.6 7-5 11-2.2l3.5-2.3-.9 4.5.9 4.5-3.5-2.3c-4 2.8-8.8 1.4-11-1.7z"/><circle cx="8.4" cy="11.3" r="1" fill="#1b0b3b"/></symbol>
+  <symbol id="i-yarn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#ff5f86"/><g fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><path d="M5 8.5c4.5-2 10-1 14 2.5"/><path d="M3.8 13.5c5-2.5 11-1 15 3"/><path d="M8.5 3c-1.5 5 0 12 5 17.5"/><path d="M15 2.8c-2.5 4.5-2.8 10.500 0 16"/></g></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M10.300 2h3.400l.5 2.700 1.800.8 2.300-1.600 2.400 2.400-1.600 2.300.8 1.800 2.700.5v3.400l-2.700.5-.8 1.800 1.600 2.300-2.400 2.400-2.300-1.600-1.800.8-.5 2.700h-3.400l-.5-2.700-1.800-.8-2.300 1.600-2.400-2.400 1.600-2.300-.8-1.800-2.700-.5v-3.400l2.700-.5.8-1.800-1.600-2.300 2.400-2.400 2.300 1.600 1.800-.8zM12 8.500a3.500 3.500 0 1 0 0 7 3.500 3.500 0 0 0 0-7z"/></symbol>
+  <symbol id="i-bag" viewBox="0 0 24 24"><path fill="currentColor" d="M4.500 8h15l1.300 13.500H3.200zM8 8V6.500a4 4 0 0 1 8 0V8h-2V6.500a2 2 0 0 0-4 0V8z"/></symbol>
+  <symbol id="i-cat" viewBox="0 0 24 24"><path fill="currentColor" d="M3.500 2.500l5 3.800a10 10 0 0 1 7 0l5-3.800.5 9.500c0 5-4 9.500-9 9.500s-9-4.500-9-9.500z"/><circle cx="8.500" cy="12.500" r="1.500" fill="#1b0b3b"/><circle cx="15.500" cy="12.500" r="1.500" fill="#1b0b3b"/><path fill="#1b0b3b" d="M10.800 15.500h2.400L12 17z"/></symbol>
+  <symbol id="i-news" viewBox="0 0 24 24"><path fill="currentColor" d="M4 3h13l3 3v15H4zM7 8v2h10V8zm0 4v2h10v-2zm0 4v2h7v-2z" fill-rule="evenodd"/></symbol>
+  <symbol id="i-friends" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="9" cy="8" r="4"/><path d="M1.500 20.500c0-4 3.300-6.500 7.500-6.500s7.500 2.500 7.500 6.500z"/><circle cx="17.500" cy="9" r="3"/><path d="M18 20.500h4.500c0-3.300-2.200-5.500-5.800-5.700 1 1.400 1.300 3.700 1.300 5.700z"/></g></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1.500l9 3.300v7c0 5-3.700 8.700-9 10.700-5.300-2-9-5.700-9-10.700v-7z"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M14.500 4.500L7 12l7.500 7.500"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2h10v2h4.500v3.500c0 2.800-2 4.700-5 5a6 6 0 0 1-3 2.300V18h3.500v4h-10v-4H11v-3.200a6 6 0 0 1-3-2.300c-3-.3-5-2.200-5-5V4h4zm0 4H5v1.500c0 1 .7 2 2.100 2.500-.1-.5-.1-1-.1-1.500zm10 0v2.500c0 .5 0 1-.1 1.500 1.400-.5 2.100-1.500 2.100-2.500V6z"/></symbol>
+  <symbol id="i-swords" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3l6.500 1.500L18 13l2.500-1 1.500 1.500-3 3 2.500 3-1.500 1.500-3-2.500-3 3-1.500-1.500 1-2.500-8.500-8.500zM21 3l-6.500 1.500-3.500 3.500 4 4 3.500-3.500zM8 15l-3 3-2.500 2.500L4 22l2.500-2.500 3-3z"/></symbol>
+  <symbol id="i-one" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l3 6.500 7 .8-5.200 4.800 1.400 7L12 17.500 5.800 21l1.400-7L2 9.300l7-.8z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 21.500C5 16.500 1.500 12.500 1.500 8.300 1.500 5 4 2.500 7.100 2.500c2 0 3.800 1 4.900 2.800 1.100-1.800 2.900-2.800 4.900-2.800 3.100 0 5.600 2.500 5.600 5.800 0 4.200-3.500 8.200-10.500 13.200z"/></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l6 5V4L7 9z"/><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M16.500 8.500a5 5 0 0 1 0 7M19 5.500a9 9 0 0 1 0 13"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l6 5V4L7 9z"/><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" d="M16.500 9.500l5 5m0-5l-5 5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 44"><rect x="1.500" y="1.500" width="21" height="41" rx="4.500" fill="#fff4e8" stroke="#1b0b3b" stroke-width="3"/><rect x="4.500" y="6" width="15" height="32" rx="1.500" fill="#7a3ae6"/><circle cx="12" cy="20" r="3.500" fill="#ffcb3d"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M4.500 13l5 5 10-11"/></symbol>
+</svg>
+
+<div id="bg"><div class="tint sad"></div><div class="tint love"></div><div class="rays"></div><div class="paws"></div><div class="floor"></div></div>
+<canvas id="stage" aria-label="Котёнок на подиуме. Потяни, чтобы покрутить, нажми, чтобы он подпрыгнул."></canvas>
+
+<!-- ЛОББИ -->
+<div id="hud">
+  <button id="accountBtn" class="chunk" aria-label="Открыть профиль игрока Любимая">
+    <img src="assets/lubimi.jpg" alt="">
+    <span>
+      <span class="name outlined">Любимая</span>
+      <span class="sub"><svg class="icon"><use href="#i-paw"/></svg>12 480<span class="lvl">Ур. 143</span></span>
+    </span>
+  </button>
+
+  <div id="wallet">
+    <div class="pill"><svg class="icon"><use href="#i-fish"/></svg>2 480</div>
+    <div class="pill"><svg class="icon"><use href="#i-yarn"/></svg>135</div>
+    <button id="muteBtn" class="chunk" aria-pressed="false" aria-label="Выключить звук"><svg class="icon"><use href="#i-sound"/></svg></button>
+    <button id="gearBtn" class="chunk" data-soon aria-label="Настройки, пока недоступно"><svg class="icon"><use href="#i-gear"/></svg></button>
+  </div>
+
+  <nav id="sideNav" aria-label="Разделы">
+    <button class="tile chunk shop" data-soon><svg class="icon"><use href="#i-bag"/></svg><span class="outlined">Магазин</span><span class="dot">3</span></button>
+    <button class="tile chunk cats" data-soon><svg class="icon"><use href="#i-cat"/></svg><span class="outlined">Коты</span></button>
+    <button class="tile chunk news" data-soon><svg class="icon"><use href="#i-news"/></svg><span class="outlined">Новости</span></button>
+  </nav>
+
+  <div id="social">
+    <button class="chunk" data-soon><svg class="icon"><use href="#i-friends"/></svg><span class="outlined">Друзья</span></button>
+    <button class="chunk" data-soon><svg class="icon"><use href="#i-shield"/></svg><span class="outlined">Клуб</span></button>
+  </div>
+
+  <div id="catPlate">
+    <div class="title outlined">Котёнок</div>
+    <div class="meta"><svg class="icon"><use href="#i-paw"/></svg>Сила 11 · Ранг 25</div>
+  </div>
+
+  <div id="playBlock">
+    <button id="modeBtn" class="chunk" data-soon>
+      <span class="art"><svg class="icon"><use href="#i-yarn"/></svg></span>
+      <span class="txt"><small>Чердак</small><b>Клубковый замес</b></span>
+    </button>
+    <button id="playBtn" class="chunk"><span class="outlined">ИГРАТЬ</span></button>
+  </div>
+</div>
+
+<!-- ПРОФИЛЬ -->
+<section id="profile" class="screen" hidden aria-label="Профиль игрока">
+  <header class="screen-head">
+    <button id="profileBack" class="back chunk" aria-label="Назад в лобби"><svg class="icon"><use href="#i-back"/></svg></button>
+    <h2 class="outlined">Профиль игрока</h2>
+  </header>
+  <div class="profile-body">
+    <div class="card id-card">
+      <div class="ava">
+        <img src="assets/lubimi.jpg" alt="Аватарка игрока Любимая">
+        <span class="lvl outlined">143</span>
+      </div>
+      <h3 class="outlined">Любимая</h3>
+      <div class="tag">#LUBIMI</div>
+      <div class="rank">Самая любимая</div>
+      <div class="xp">
+        <div class="row"><span>Опыт</span><span>3 120 / 4 000</span></div>
+        <div class="bar"><i style="width:78%"></i></div>
+      </div>
+      <div class="club-row">
+        <svg class="icon"><use href="#i-shield"/></svg>
+        <span>Кошачий двор<small>Клуб · Хозяйка</small></span>
+      </div>
+    </div>
+
+    <div class="stats-col">
+      <div class="stats">
+        <div class="card stat"><svg class="icon c-sun"><use href="#i-paw"/></svg><span><small>Лапки</small><b>12 480</b></span></div>
+        <div class="card stat"><svg class="icon c-sun"><use href="#i-trophy"/></svg><span><small>Рекорд</small><b>14 014</b></span></div>
+        <div class="card stat"><svg class="icon c-pink"><use href="#i-heart"/></svg><span><small>Любовь</small><b>∞</b></span></div>
+        <div class="card stat"><svg class="icon c-lime"><use href="#i-swords"/></svg><span><small>Побед 3 на 3</small><b>1 402</b></span></div>
+        <div class="card stat"><svg class="icon c-sky"><use href="#i-one"/></svg><span><small>Побед соло</small><b>867</b></span></div>
+        <div class="card stat"><svg class="icon c-lime"><use href="#i-friends"/></svg><span><small>Побед дуо</small><b>1 114</b></span></div>
+      </div>
+      <div class="card fav">
+        <img class="js-cat" alt="Котёнок">
+        <div>
+          <small>Любимый боец</small>
+          <h4 class="outlined">Котёнок</h4>
+          <p>Сила 11, ранг 25. Смотрит прямо в душу и никогда не проигрывает в гляделки.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- МАТЧ -->
+<section id="match" class="screen" hidden aria-label="Загрузка матча">
+  <div id="search">
+    <div class="radar"><img class="js-cat" alt=""></div>
+    <h2 class="outlined" role="status">Поиск игроков <span id="foundCount">1</span>/6</h2>
+    <div class="mode">Клубковый замес · Чердак</div>
+    <div class="slots" id="slots"></div>
+    <button id="cancelBtn" class="chunk"><span class="outlined">Отмена</span></button>
+  </div>
+
+  <div id="versus" hidden>
+    <div class="team ours" id="teamOurs"><span class="label outlined">Твоя команда</span></div>
+    <div class="vs">ПРОТИВ</div>
+    <div class="team theirs" id="teamTheirs"><span class="label outlined">Соперники</span></div>
+    <div class="loadbar">
+      <div class="info"><b>Клубковый замес</b><small>Арена: Чердак · 3 на 3</small></div>
+      <div class="progress">
+        <div class="status"><span id="loadStatus" role="status">Подключаемся к арене</span><span id="loadPct">0%</span></div>
+        <div class="bar"><i id="loadFill"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ФИНАЛ -->
+<div id="sceneStatus" class="sr-only" role="status"></div>
+<section id="finale" hidden aria-label="Признание">
+  <div class="finale-controls">
+    <button id="soundBtn" class="chunk" aria-pressed="false"><span class="outlined">Выключить звук</span></button>
+    <button id="finaleLobby" class="chunk"><span class="outlined">В лобби</span></button>
+  </div>
+  <h1 id="loveText" class="outlined">Я люблю тебя!</h1>
+</section>
+<div id="fade"></div>
+
+<!-- ЗАСТАВКА -->
+<div id="boot">
+  <svg class="icon"><use href="#i-paw"/></svg>
+  <h1 class="outlined">Мяу-Арена</h1>
+  <p id="bootMsg" role="status">Будим котёнка…</p>
+  <button id="startBtn" class="chunk" hidden><span class="outlined">Начать</span></button>
+</div>
+
+<!-- ПОВЕРНИ ТЕЛЕФОН -->
+<div id="rotate" role="alertdialog" aria-label="Поверни телефон">
+  <svg class="phone" aria-hidden="true"><use href="#i-phone"/></svg>
+  <h2 class="outlined">Поверни телефон</h2>
+  <p>Сайт работает только в горизонтальном положении.</p>
+  <p class="hint">Не поворачивается? Выключи блокировку ориентации в Пункте управления.</p>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const $ = (id) => document.getElementById(id);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// телефоны и планшеты: лёгкая модель, меньше эффектов, только горизонтально
+const isTouch = navigator.maxTouchPoints > 0 || matchMedia('(pointer: coarse)').matches;
+document.documentElement.classList.toggle('touch', isTouch);
+
+/* ---------- 3D-сцена ---------- */
+const CAT_YAW = 0;          // куда смотрит модель по умолчанию
+const canvas = $('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+const MAX_PR = Math.min(devicePixelRatio, isTouch ? 1.5 : 2);
+renderer.setPixelRatio(MAX_PR);
+// если телефон не тянет, снижаем чёткость вместо рывков
+const perf = { frames: 0, time: 0, pr: MAX_PR };
+function watchPerf(dt) {
+  if (!isTouch || perf.pr <= 1) return;
+  perf.frames++; perf.time += dt;
+  if (perf.time < 1.5) return;
+  if (perf.frames / perf.time < 40) {
+    perf.pr = Math.max(1, perf.pr - 0.25);
+    renderer.setPixelRatio(perf.pr);
+  }
+  perf.frames = 0; perf.time = 0;
+}
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.75;
+
+const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 50);
+const key = new THREE.DirectionalLight(0xfff1dd, 2.0);
+key.position.set(2, 4, 5);
+const rim = new THREE.DirectionalLight(0xd59bff, 1.6);
+rim.position.set(-3, 2, -3);
+scene.add(key, rim, new THREE.AmbientLight(0xffffff, 0.35));
+
+const FLOOR_Y = -0.95;
+const podium = new THREE.Group();
+{
+  const side = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.02, 1.1, 0.24, 64),
+    new THREE.MeshStandardMaterial({ color: 0x2c1078, roughness: 0.6, envMapIntensity: 0.15 })
+  );
+  side.position.y = FLOOR_Y - 0.13;
+
+  const c = document.createElement('canvas');
+  c.width = c.height = 512;
+  const g = c.getContext('2d');
+  g.fillStyle = '#ffcb3d'; g.beginPath(); g.arc(256, 256, 256, 0, 7); g.fill();
+  g.fillStyle = '#7a3ae6'; g.beginPath(); g.arc(256, 256, 232, 0, 7); g.fill();
+  g.fillStyle = '#6a2cd4'; g.beginPath(); g.arc(256, 256, 176, 0, 7); g.fill();
+  // мягкая тень под котом
+  const sh = g.createRadialGradient(256, 256, 40, 256, 256, 190);
+  sh.addColorStop(0, 'rgba(27,11,59,.7)'); sh.addColorStop(1, 'rgba(27,11,59,0)');
+  g.fillStyle = sh; g.fillRect(0, 0, 512, 512);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const top = new THREE.Mesh(
+    new THREE.CircleGeometry(1.02, 64),
+    new THREE.MeshBasicMaterial({ map: tex })
+  );
+  top.rotation.x = -Math.PI / 2;
+  top.position.y = FLOOR_Y - 0.009;
+  podium.add(side, top);
+}
+scene.add(podium);
+
+const rig = new THREE.Group();   // прыжки и дыхание
+scene.add(rig);
+let catMesh = null;
+let catBox = null;
+
+const MORPHS = ['sad', 'smile', 'nod', 'tilt', 'pawL', 'pawR'];
+const dir = {
+  mode: 'lobby',      // lobby | sad | smile | dance
+  cam: null,
+  w: Object.fromEntries(MORPHS.map((n) => [n, 0])),
+  target: Object.fromEntries(MORPHS.map((n) => [n, 0])),
+};
+
+/* Модель без скелета, поэтому мимику и движения лап собираем сдвигом вершин. */
+function buildMorphs(mesh) {
+  const g = mesh.geometry, P = g.attributes.position, N = g.attributes.normal, n = P.count;
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  const smooth = (a, b, x) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const blob = (dx, dy, r) => { const d = (dx * dx + dy * dy) / (r * r); return d >= 1 ? 0 : (1 - d) * (1 - d); };
+  const pos = MORPHS.map(() => new Float32Array(n * 3));
+  const nor = MORPHS.map(() => new Float32Array(n * 3));
+  const [SAD, SMILE, NOD, TILT, PAWL, PAWR] = [0, 1, 2, 3, 4, 5];
+  const set = (arr, i, x, y, z) => { arr[i * 3] = x; arr[i * 3 + 1] = y; arr[i * 3 + 2] = z; };
+
+  for (let i = 0; i < n; i++) {
+    const x = P.getX(i), y = P.getY(i), z = P.getZ(i);
+    const nx = N.getX(i), ny = N.getY(i), nz = N.getZ(i);
+    const face = z > 0.25 ? 1 : 0;
+
+    if (face) {
+      let sdx = 0, sdy = 0, hdx = 0, hdy = 0;
+      for (const s of [-1, 1]) {
+        const ex = x - s * 0.15, ey = y + 0.166;
+        const eye = blob(ex, ey, 0.125);
+        sdy += (-0.46 * ex * s - (ey > 0 ? 0.26 * ey : 0)) * eye;   // внешний уголок глаза вниз
+        sdy += 0.03 * blob(x - s * 0.07, y + 0.055, 0.085);         // брови домиком
+        sdy -= 0.032 * blob(x - s * 0.24, y + 0.08, 0.085);
+        const corner = blob(x - s * 0.095, y + 0.3, 0.075);
+        sdy -= 0.042 * corner;                                       // уголки рта вниз
+        hdy += 0.036 * corner;
+        hdx += s * 0.012 * corner;
+      }
+      sdy += 0.012 * blob(x, y + 0.29, 0.05);
+      set(pos[SAD], i, sdx, sdy, 0);
+      set(pos[SMILE], i, hdx, hdy, 0);
+    }
+
+    // голова вместе с наушниками и кристаллом
+    const hw = smooth(-0.56, -0.42, y);
+    if (hw > 0) {
+      const dy = y + 0.48, dz = z - 0.05, a = 0.32 * hw;
+      const c = Math.cos(a), si = Math.sin(a);
+      set(pos[NOD], i, 0, dy * c - dz * si - dy, dy * si + dz * c - dz);
+      set(nor[NOD], i, 0, ny * c - nz * si - ny, ny * si + nz * c - nz);
+      const b = 0.3 * hw, cb = Math.cos(b), sb = Math.sin(b);
+      set(pos[TILT], i, x * cb - dy * sb - x, x * sb + dy * cb - dy, 0);
+      set(nor[TILT], i, nx * cb - ny * sb - nx, nx * sb + ny * cb - ny, 0);
+    }
+
+    // передние лапы поднимаются от плеча
+    if (y < -0.48 && z > 0.05) {
+      const s = x < 0 ? -1 : 1;
+      const w = (1 - smooth(-0.68, -0.5, y)) * smooth(0.05, 0.16, z) * (1 - smooth(0.1, 0.15, Math.abs(s * x - 0.15)));
+      if (w > 0) {
+        const a = -1.25 * w, c = Math.cos(a), si = Math.sin(a);
+        const dy = y + 0.54, dz = z - 0.16, t = s < 0 ? PAWL : PAWR;
+        set(pos[t], i, 0, dy * c - dz * si - dy, dy * si + dz * c - dz);
+        set(nor[t], i, 0, ny * c - nz * si - ny, ny * si + nz * c - nz);
+      }
+    }
+  }
+  g.morphAttributes.position = pos.map((a, i) => { const b = new THREE.BufferAttribute(a, 3); b.name = MORPHS[i]; return b; });
+  // на телефоне экономим память: нормали не двигаем, на таком размере разницы не видно
+  if (!isTouch) g.morphAttributes.normal = nor.map((a, i) => { const b = new THREE.BufferAttribute(a, 3); b.name = MORPHS[i]; return b; });
+  g.morphTargetsRelative = true;
+  mesh.updateMorphTargets();
+  mesh.frustumCulled = false;
+}
+
+/* таблички */
+const SIGN_Y = -0.93, SIGN_Z = 0.5, SIGN_W = 1.74, SIGN_H = 0.86;
+function roundedShape(w, h, r) {
+  const s = new THREE.Shape();
+  const x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y);
+  s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+  return s;
+}
+function makeSign(text, accent) {
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 506;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff4e8'; g.fillRect(0, 0, c.width, c.height);
+  g.strokeStyle = accent; g.lineWidth = 16;
+  g.strokeRect(26, 26, c.width - 52, c.height - 52);
+  g.fillStyle = '#1b0b3b'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  // верх таблички закрыт лапами, поэтому текст ниже центра
+  const maxW = c.width - 130, top = 128, bottom = c.height - 52;
+  let size = 96, lines = [];
+  for (; size > 30; size -= 4) {
+    g.font = `900 ${size}px Rubik, system-ui, sans-serif`;
+    lines = []; let line = '';
+    for (const word of text.split(' ')) {
+      const next = line ? line + ' ' + word : word;
+      if (g.measureText(next).width > maxW && line) { lines.push(line); line = word; } else line = next;
+    }
+    lines.push(line);
+    if (lines.length * size * 1.16 <= bottom - top) break;
+  }
+  const lh = size * 1.16, y0 = (top + bottom) / 2 - (lines.length - 1) * lh / 2;
+  lines.forEach((l, i) => g.fillText(l, c.width / 2, y0 + i * lh));
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+  const shape = roundedShape(SIGN_W, SIGN_H, 0.06);
+  const face = new THREE.ShapeGeometry(shape, 8);
+  const uv = face.attributes.uv, p = face.attributes.position;
+  for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) / SIGN_W + 0.5, p.getY(i) / SIGN_H + 0.5);
+  const front = new THREE.Mesh(face, new THREE.MeshBasicMaterial({ map: tex }));
+  front.position.z = 0.031;
+  const body = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(roundedShape(SIGN_W + 0.04, SIGN_H + 0.04, 0.07), { depth: 0.03, bevelEnabled: false, curveSegments: 8 }),
+    new THREE.MeshStandardMaterial({ color: 0x8a5a33, roughness: 0.8, envMapIntensity: 0.3 })
+  );
+  const sign = new THREE.Group();
+  sign.add(body, front);
+  sign.visible = false;
+  rig.add(sign);
+  return sign;
+}
+const placeSign = (s) => {
+  s.position.set(0, SIGN_Y, SIGN_Z);
+  s.rotation.set(0, 0, 0);
+  s.scale.setScalar(1);
+};
+let signSorry, signSurprise;
+
+/* слёзы */
+const tearMat = new THREE.MeshStandardMaterial({ color: 0x8fd6ff, roughness: 0.08, metalness: 0, transparent: true, opacity: 0.92 });
+const tears = [-1, 1].map((s, i) => {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 12), tearMat);
+  m.userData = { s, phase: i * 0.47 };
+  m.visible = false;
+  rig.add(m);
+  return m;
+});
+
+/* сердечки летят из-за кота */
+const HEARTS = isTouch ? 90 : 150;
+const heartShape = new THREE.Shape();
+heartShape.moveTo(0, -0.5);
+heartShape.bezierCurveTo(-0.72, -0.02, -0.56, 0.5, -0.24, 0.5);
+heartShape.bezierCurveTo(-0.1, 0.5, 0, 0.4, 0, 0.26);
+heartShape.bezierCurveTo(0, 0.4, 0.1, 0.5, 0.24, 0.5);
+heartShape.bezierCurveTo(0.56, 0.5, 0.72, -0.02, 0, -0.5);
+const heartGeo = new THREE.ExtrudeGeometry(heartShape, { depth: 0.12, bevelEnabled: true, bevelSize: 0.05, bevelThickness: 0.05, bevelSegments: 2, curveSegments: 8 });
+heartGeo.center();
+const hearts = new THREE.InstancedMesh(heartGeo, new THREE.MeshStandardMaterial({ roughness: 0.35, metalness: 0, envMapIntensity: 0.5 }), HEARTS);
+hearts.frustumCulled = false;
+hearts.visible = false;
+scene.add(hearts);
+const heartData = [];
+{
+  const palette = [0xff2f6d, 0xff5f86, 0xff8fb0, 0xffffff, 0xe0115f, 0xffc2d6].map((h) => new THREE.Color(h));
+  for (let i = 0; i < HEARTS; i++) {
+    hearts.setColorAt(i, palette[i % palette.length]);
+    heartData.push({ life: 0, max: 1, x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, spin: 0, rot: 0, size: 0 });
+  }
+  hearts.instanceColor.needsUpdate = true;
+}
+let heartCursor = 0;
+function emitHeart() {
+  const h = heartData[heartCursor];
+  heartCursor = (heartCursor + 1) % HEARTS;
+  const a = Math.random() * Math.PI * 2;
+  const speed = 1.3 + Math.random() * 1.7;
+  h.x = Math.cos(a) * 0.2; h.y = -0.2 + Math.sin(a) * 0.3; h.z = -0.8;
+  h.vx = Math.cos(a) * speed * 1.25;
+  h.vy = Math.sin(a) * speed + 0.25;
+  h.vz = 0.5 + Math.random() * 2;
+  h.max = 1.7 + Math.random() * 1.2; h.life = h.max;
+  h.rot = Math.random() * 6.28; h.spin = (Math.random() - 0.5) * 3;
+  h.size = 0.09 + Math.random() * 0.13;
+}
+const hm = new THREE.Object3D();
+function updateHearts(dt) {
+  for (let i = 0; i < HEARTS; i++) {
+    const h = heartData[i];
+    if (h.life > 0) {
+      h.life -= dt;
+      h.x += h.vx * dt; h.y += h.vy * dt; h.z += h.vz * dt;
+      h.vy += 0.3 * dt; h.rot += h.spin * dt;
+    }
+    const age = 1 - h.life / h.max;
+    const k = h.life <= 0 ? 0 : Math.min(1, age * 7) * Math.min(1, h.life * 2.5);
+    hm.position.set(h.x, h.y, h.z);
+    hm.rotation.set(0, Math.sin(h.rot) * 0.7, Math.sin(h.rot * 0.7) * 0.5);
+    hm.scale.setScalar(Math.max(k * h.size, 0.0001));
+    hm.updateMatrix();
+    hearts.setMatrixAt(i, hm.matrix);
+  }
+  hearts.instanceMatrix.needsUpdate = true;
+}
+
+/* твины на кадрах */
+const tweens = new Set();
+const tween = (dur, fn) => tweens.add({ t: 0, dur, fn });
+const easeBack = (k) => { const q = k - 1; return 1 + 2.7 * q * q * q + 1.7 * q * q; };
+
+function frameCamera() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  snapCamera();
+}
+
+/* где стоит камера в каждой сцене */
+const FOV_K = 2 * Math.tan(THREE.MathUtils.degToRad(13));
+function framing() {
+  const a = camera.aspect;
+  if (dir.mode === 'dance') return { z: Math.max(3.45 / FOV_K, 2.0 / (FOV_K * a)), y: 0, look: -0.42 };
+  if (dir.mode !== 'lobby') return { z: Math.max(3.1 / FOV_K, 2.15 / (FOV_K * a)), y: 0.05, look: -0.3 };
+  if (a < 1) return { z: Math.max(7.2, 7.2 * (0.72 / a) * 0.8), y: 0.42, look: -0.12 };
+  return { z: 7.4, y: 0.42, look: 0.02 };
+}
+function snapCamera() {
+  const f = framing();
+  dir.cam = { ...f };
+  camera.position.set(0, f.y, f.z);
+  camera.lookAt(0, f.look, 0);
+}
+addEventListener('resize', frameCamera);
+addEventListener('orientationchange', () => setTimeout(frameCamera, 350));
+
+/* управление котом */
+const state = {
+  yaw: 0, yawV: 0, dragging: false, dragged: 0, lastX: 0,
+  lookX: 0, lookY: 0, hopY: 0, hopV: 0, squash: 0, squashV: 0, paused: false,
+};
+function hop(power = 2.9) {
+  if (state.hopY > 0.02) return;
+  state.hopV = power;
+  state.squash = -0.1;
+}
+const raycaster = new THREE.Raycaster();
+function hitsCat(e) {
+  if (!catBox) return false;
+  const p = new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+  raycaster.setFromCamera(p, camera);
+  return raycaster.ray.intersectsBox(catBox);
+}
+canvas.addEventListener('pointerdown', (e) => {
+  state.dragging = true; state.dragged = 0; state.lastX = e.clientX;
+  canvas.setPointerCapture(e.pointerId);
+  canvas.classList.add('dragging');
+});
+canvas.addEventListener('pointermove', (e) => {
+  state.lookX = (e.clientX / innerWidth) * 2 - 1;
+  state.lookY = (e.clientY / innerHeight) * 2 - 1;
+  if (!state.dragging) return;
+  const dx = e.clientX - state.lastX;
+  state.lastX = e.clientX;
+  state.dragged += Math.abs(dx);
+  state.yaw += dx * 0.012;
+  state.yawV = dx * 0.012;
+});
+const endDrag = (e) => {
+  if (!state.dragging) return;
+  state.dragging = false;
+  canvas.classList.remove('dragging');
+  if (state.dragged < 6 && hitsCat(e)) hop();
+};
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+
+function poseLobby(t, dt) {
+  if (!state.dragging) {
+    state.yaw += state.yawV;
+    state.yawV *= 0.93;
+    // кот возвращается лицом к зрителю
+    state.yaw += (Math.atan2(Math.sin(-state.yaw), Math.cos(-state.yaw))) * Math.min(1, dt * 1.6);
+  }
+  const breathe = reduceMotion ? 0 : Math.sin(t * 2.1) * 0.012;
+  const sy = 1 + state.squash + breathe;
+  const sx = 1 / Math.sqrt(Math.max(sy, 0.5));
+  rig.scale.set(sx, sy, sx);
+  rig.position.set(0, state.hopY + FLOOR_Y * (1 - sy), 0); // лапы остаются на подиуме
+  const look = state.dragging ? 0 : state.lookX * 0.32;
+  rig.rotation.y = CAT_YAW + state.yaw + look + (reduceMotion ? 0 : Math.sin(t * 0.6) * 0.07);
+  rig.rotation.x = state.dragging ? 0 : state.lookY * 0.05;
+  rig.rotation.z = reduceMotion ? 0 : Math.sin(t * 1.05) * 0.018;
+}
+
+function poseCutscene(t) {
+  const sad = dir.mode === 'sad';
+  const sy = 1 + state.squash + Math.sin(t * (sad ? 1.3 : 2.4)) * (sad ? 0.016 : 0.01);
+  const sx = 1 / Math.sqrt(Math.max(sy, 0.5));
+  rig.scale.set(sx, sy, sx);
+  rig.position.set(0, state.hopY + FLOOR_Y * (1 - sy), 0);
+  rig.rotation.set(0, sad ? Math.sin(t * 0.7) * 0.05 : Math.sin(t * 1.4) * 0.09, sad ? Math.sin(t * 0.9) * 0.012 : 0);
+  dir.target.tilt = sad ? 0.28 + Math.sin(t * 0.8) * 0.1 : Math.sin(t * 2.4) * 0.25;
+
+  for (const m of tears) {
+    m.visible = sad;
+    if (!sad) continue;
+    const k = ((t * 0.62 + m.userData.phase) % 1);
+    const fall = k * k;
+    m.position.set(m.userData.s * (0.2 + fall * 0.015) - 0.015, -0.27 - fall * 0.2, 0.47 - fall * 0.02);
+    const pop = Math.min(1, k * 6) * (1 - Math.max(0, k - 0.85) / 0.15);
+    m.scale.set(0.02 * pop, 0.031 * pop, 0.018 * pop);
+  }
+}
+
+function poseDance(b) {
+  const amp = reduceMotion ? 0.35 : 1;
+  const pi = Math.PI;
+  const bounce = Math.abs(Math.sin(pi * b));
+  const sy = 1 + state.squash + Math.cos(2 * pi * b) * 0.055 * amp;
+  const sx = 1 / Math.sqrt(Math.max(sy, 0.5));
+  rig.scale.set(sx, sy, sx);
+  const bar = b % 16;
+  // каждые 16 долей прыжок с разворотом
+  const inSpin = bar >= 14;
+  const spinK = inSpin ? (bar - 14) / 2 : 0;
+  const spinEase = spinK * spinK * (3 - 2 * spinK);
+  rig.position.set(
+    Math.sin(pi * b / 2) * 0.3 * amp,
+    (bounce * 0.15 + (inSpin ? Math.sin(spinK * pi) * 0.3 : 0)) * amp + FLOOR_Y * (1 - sy) + 0.03,
+    0
+  );
+  rig.rotation.set(
+    0.03,
+    Math.sin(pi * b / 4) * 0.42 * amp + spinEase * pi * 2 * (reduceMotion ? 0 : 1),
+    -Math.sin(pi * b / 2) * 0.13 * amp
+  );
+  dir.target.nod = Math.sin(2 * pi * b) * 0.42 * amp;
+  dir.target.tilt = Math.sin(pi * b / 2) * 0.8 * amp;
+  dir.target.pawL = 0.32 + 0.48 * Math.sin(pi * b) * amp;
+  dir.target.pawR = 0.32 - 0.48 * Math.sin(pi * b) * amp;
+}
+
+const clock = new THREE.Clock();
+let lastBeat = -1;
+function tick() {
+  requestAnimationFrame(tick);
+  if (state.paused || state.rotate) { clock.getDelta(); return; }
+  const raw = clock.getDelta();
+  watchPerf(raw);
+  const dt = Math.min(raw, 0.05);
+  const t = clock.elapsedTime;
+
+  // прыжок
+  state.hopV -= 9 * dt;
+  state.hopY += state.hopV * dt;
+  if (state.hopY <= 0) {
+    if (state.hopV < -1) state.squash = Math.max(-0.14, state.hopV * 0.035);
+    state.hopY = 0; state.hopV = 0;
+  }
+  // пружина приплющивания
+  state.squashV += (-state.squash * 170 - state.squashV * 12) * dt;
+  state.squash += state.squashV * dt;
+
+  for (const tw of tweens) {
+    tw.t += dt;
+    const k = Math.min(1, tw.t / tw.dur);
+    tw.fn(k);
+    if (k === 1) tweens.delete(tw);
+  }
+
+  if (dir.mode === 'lobby') poseLobby(t, dt);
+  else if (dir.mode === 'dance') {
+    const b = audio.beat(t);
+    poseDance(b);
+    const whole = Math.floor(b);
+    if (whole !== lastBeat) {
+      lastBeat = whole;
+      for (let i = 0; i < (reduceMotion ? 2 : isTouch ? 4 : 7); i++) emitHeart();
+    }
+    if (!reduceMotion && Math.random() < dt * (isTouch ? 12 : 22)) emitHeart();
+    updateHearts(dt);
+    const f = b - whole;
+    $('loveText').style.setProperty('--beat', (1 + 0.06 * (1 - f) ** 3 * (reduceMotion ? 0 : 1)).toFixed(3));
+  } else poseCutscene(t);
+
+  const dance = dir.mode === 'dance';
+  const speed = 1 - Math.exp(-dt * (dance ? 26 : 5));
+  MORPHS.forEach((n, i) => {
+    dir.w[n] += (dir.target[n] - dir.w[n]) * speed;
+    if (catMesh) catMesh.morphTargetInfluences[i] = dir.w[n];
+  });
+
+  const f = framing(), ck = 1 - Math.exp(-dt * 3.5), c = dir.cam;
+  c.z += (f.z - c.z) * ck; c.y += (f.y - c.y) * ck; c.look += (f.look - c.look) * ck;
+  camera.position.set(0, c.y, c.z);
+  camera.lookAt(0, c.look, 0);
+
+  renderer.render(scene, camera);
+}
+
+/* снимок кота для профиля и экрана матча */
+function snapshotCat() {
+  const size = 512;
+  const prevPR = renderer.getPixelRatio();
+  podium.visible = false;
+  const rot = rig.rotation.clone(), scl = rig.scale.clone(), pos = rig.position.clone();
+  rig.rotation.set(0, CAT_YAW + 0.28, 0); rig.scale.set(1, 1, 1); rig.position.set(0, 0, 0);
+  renderer.setPixelRatio(1);
+  renderer.setSize(size, size, false);
+  const cam = new THREE.PerspectiveCamera(24, 1, 0.1, 50);
+  cam.position.set(0, 0.25, 4.9);
+  cam.lookAt(0, 0.08, 0);
+  renderer.render(scene, cam);
+  const url = canvas.toDataURL('image/png');
+  podium.visible = true;
+  rig.rotation.copy(rot); rig.scale.copy(scl); rig.position.copy(pos);
+  renderer.setPixelRatio(prevPR);
+  frameCamera();
+  return url;
+}
+let catPic = '';
+
+async function fetchModel(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Файл модели не найден');
+  if (!res.body) return res.arrayBuffer();
+  // сервер может сжимать файл, тогда content-length меньше настоящего размера;
+  // поэтому собираем куски, а этот заголовок берём только для процентов
+  const total = +res.headers.get('content-length');
+  const reader = res.body.getReader();
+  const chunks = [];
+  let got = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    got += value.length;
+    if (total) $('bootMsg').textContent = `Будим котёнка… ${Math.min(99, Math.round(got / total * 100))}%`;
+  }
+  const out = new Uint8Array(got);
+  let at = 0;
+  for (const c of chunks) { out.set(c, at); at += c.length; }
+  return out.buffer;
+}
+async function readEmbeddedModel() {
+  await new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'assets/model-data.js';
+    s.onload = res; s.onerror = () => rej(new Error('Файл модели не найден'));
+    document.head.append(s);
+  });
+  const bin = atob(window.CAT_GLB_B64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  delete window.CAT_GLB_B64;
+  return bytes.buffer;
+}
+async function loadCat() {
+  // с сервера берём бинарный файл, при открытии с диска браузер запрещает fetch
+  const buffer = location.protocol.startsWith('http')
+    ? await fetchModel('assets/model-lite.glb')
+    : await readEmbeddedModel();
+  const gltf = await new GLTFLoader().parseAsync(buffer, '');
+  gltf.scene.traverse((o) => {
+    if (o.isMesh) {
+      catMesh = o;
+      const anis = renderer.capabilities.getMaxAnisotropy();
+      for (const k of ['map', 'normalMap', 'roughnessMap', 'metalnessMap']) {
+        if (o.material[k]) o.material[k].anisotropy = anis;
+      }
+    }
+  });
+  buildMorphs(catMesh);
+  rig.add(gltf.scene);
+  catBox = new THREE.Box3().setFromObject(gltf.scene);
+  await document.fonts.load('900 80px Rubik', 'Извините').catch(() => {});
+  signSorry = makeSign('Извините, но я не умею сражаться, у меня лапки(', '#7f93c9');
+  signSurprise = makeSign('Зато у меня есть кое что еще!', '#ff5f86');
+}
+
+/* ---------- экраны ---------- */
+const hud = $('hud'), profile = $('profile'), match = $('match');
+function showOverlay(el) {
+  el.hidden = false;
+  hud.inert = true; canvas.inert = true;
+  state.paused = true;
+}
+function hideOverlay(el, focusBack) {
+  el.hidden = true;
+  hud.inert = false; canvas.inert = false;
+  state.paused = false;
+  focusBack?.focus();
+}
+
+$('accountBtn').addEventListener('click', () => {
+  showOverlay(profile);
+  $('profileBack').focus();
+});
+$('profileBack').addEventListener('click', () => hideOverlay(profile, $('accountBtn')));
+
+// кнопки, которые пока не работают, только покачиваются
+document.querySelectorAll('[data-soon]').forEach((b) => {
+  b.setAttribute('aria-disabled', 'true');
+  b.addEventListener('click', () => {
+    b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope');
+  });
+});
+
+/* ---------- звук: всё синтезируется в браузере, файлов нет ---------- */
+const audio = (() => {
+  const MIDI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+  const m = (n) => 12 * (+n[1] + 1) + MIDI[n[0]];
+  const hz = (midi) => 440 * 2 ** ((midi - 69) / 12);
+  const LOVE_SPB = 60 / 132;
+
+  let ctx = null, master = null, sfxBus = null, sceneBus = null, noise = null;
+  let out = null;          // куда сейчас пишем ноты
+  let track = null, timer = null, muted = false, wanted = true, fallback = 0;
+  try { muted = localStorage.getItem('meow-muted') === '1'; } catch {}
+
+  const tone = (type, f, at, dur, vol, hold = 0.65) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(vol, at + 0.008);
+    g.gain.setValueAtTime(vol, at + dur * hold);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    o.connect(g).connect(out);
+    o.start(at); o.stop(at + dur + 0.02);
+  };
+  const glide = (type, f0, f1, at, dur, vol) => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(f0, at);
+    o.frequency.exponentialRampToValueAtTime(f1, at + dur);
+    g.gain.setValueAtTime(vol, at);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    o.connect(g).connect(out);
+    o.start(at); o.stop(at + dur + 0.02);
+  };
+  const hiss = (at, dur, vol, freq, type = 'highpass', freqEnd = 0, q = 1) => {
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = noise; s.loop = true;
+    f.type = type; f.Q.value = q;
+    f.frequency.setValueAtTime(freq, at);
+    if (freqEnd) f.frequency.exponentialRampToValueAtTime(freqEnd, at + dur);
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(vol, at + Math.min(0.03, dur * 0.3));
+    g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    s.connect(f).connect(g).connect(out);
+    s.start(at); s.stop(at + dur + 0.01);
+  };
+  const ramp = (param, points, at, dur) => {
+    param.setValueAtTime(points[0], at);
+    points.forEach((v, i) => { if (i) param.linearRampToValueAtTime(v, at + dur * i / (points.length - 1)); });
+  };
+
+  /* настоящие записи кота, обрезанные куски лежат в assets/cat-sounds.js */
+  const clips = {};
+  const decodeClips = () => {
+    for (const [name, b64] of Object.entries(window.CAT_SOUNDS || {})) {
+      const bin = atob(b64), bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      ctx.decodeAudioData(bytes.buffer).then((buf) => { clips[name] = buf; }).catch((e) => console.warn('Звук не прочитан:', name, e));
+    }
+  };
+  const clip = (name, at, { vol = 1, rate = 1, trem = 0 } = {}) => {
+    if (!clips[name]) return;
+    const src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = clips[name];
+    src.playbackRate.value = rate;
+    g.gain.value = vol;
+    src.connect(g);
+    if (trem) {
+      // дрожь в голосе
+      const lfo = ctx.createOscillator(), depth = ctx.createGain(), wob = ctx.createGain();
+      lfo.frequency.value = trem; depth.gain.value = 0.35; wob.gain.value = 0.65;
+      lfo.connect(depth).connect(wob.gain);
+      g.connect(wob).connect(out);
+      lfo.start(at); lfo.stop(at + src.buffer.duration / rate + 0.05);
+    } else g.connect(out);
+    src.start(at);
+  };
+  const brass = (midi, at, dur, vol, vibrato = false) => {
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(hz(midi), at);
+    if (vibrato) {
+      const lfo = ctx.createOscillator(), d = ctx.createGain();
+      lfo.frequency.setValueAtTime(4.5, at);
+      lfo.frequency.linearRampToValueAtTime(7, at + dur);
+      d.gain.value = hz(midi) * 0.035;
+      lfo.connect(d).connect(o.frequency);
+      lfo.start(at); lfo.stop(at + dur + 0.02);
+      o.frequency.linearRampToValueAtTime(hz(midi) * 0.94, at + dur);
+    }
+    f.type = 'lowpass'; f.Q.value = 3;
+    ramp(f.frequency, vibrato ? [300, 1300, 900, 300] : [300, 1400, 500], at, dur);
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.linearRampToValueAtTime(vol, at + 0.05);
+    g.gain.setValueAtTime(vol, at + dur * 0.75);
+    g.gain.linearRampToValueAtTime(0.0001, at + dur);
+    o.connect(f).connect(g).connect(out);
+    o.start(at); o.stop(at + dur + 0.02);
+  };
+  const sob = (at) => {
+    // три коротких вдоха, потом дрожащий скулёж и выдох
+    [0, 0.2, 0.4].forEach((d, i) => hiss(at + d, 0.13, 0.26, 1100 + i * 250, 'bandpass', 2300 + i * 300, 2.5));
+    clip('whimper', at + 0.56, { rate: 0.92, vol: 0.75, trem: 9 });
+    hiss(at + 1.5, 0.3, 0.1, 900, 'lowpass', 400);
+  };
+
+  /* --- короткие эффекты --- */
+  const onBus = (bus, fn) => {
+    if (!ctx || ctx.state === 'closed' || !bus) return;
+    const prev = out; out = bus;
+    fn(ctx.currentTime + 0.005);
+    out = prev;
+  };
+  const sfx = (fn) => onBus(sfxBus, fn);
+  const fx = {
+    click: () => sfx((t) => { glide('sine', 760, 360, t, 0.08, 0.34); hiss(t, 0.025, 0.09, 3500); }),
+    nope: () => sfx((t) => { glide('square', 230, 170, t, 0.09, 0.09); glide('square', 180, 120, t + 0.1, 0.12, 0.09); }),
+    start: () => sfx((t) => ['C5', 'G5', 'C6'].forEach((n, i) => tone('triangle', hz(m(n)), t + i * 0.07, 0.25, 0.25))),
+    play: () => sfx((t) => {
+      ['C5', 'E5', 'G5', 'C6'].forEach((n, i) => {
+        tone('square', hz(m(n)), t + i * 0.055, 0.2, 0.1);
+        tone('triangle', hz(m(n)), t + i * 0.055, 0.28, 0.2);
+      });
+      hiss(t, 0.3, 0.1, 600, 'bandpass', 3800, 1.2);
+    }),
+    found: (i) => sfx((t) => {
+      const note = hz(m('C5') + [0, 2, 4, 7, 9, 12][i]);
+      tone('sine', note, t, 0.32, 0.26, 0.15);
+      tone('sine', note * 2, t, 0.18, 0.08, 0.15);
+    }),
+    matchFound: () => sfx((t) => {
+      ['E5', 'G5', 'C6', 'E6'].forEach((n, i) => tone('square', hz(m(n)), t + i * 0.09, 0.2, 0.11));
+      ['C5', 'E5', 'G5', 'C6'].forEach((n) => tone('square', hz(m(n)), t + 0.36, 0.7, 0.07));
+      glide('sine', 130, 50, t + 0.36, 0.35, 0.5);
+    }),
+    stamp: () => sfx((t) => { glide('sine', 180, 42, t, 0.28, 0.65); hiss(t, 0.16, 0.2, 700, 'lowpass'); }),
+    ready: () => sfx((t) => { tone('triangle', 1180, t, 0.08, 0.12, 0.2); tone('triangle', 1570, t + 0.06, 0.12, 0.12, 0.2); }),
+    whoosh: () => sfx((t) => hiss(t, 0.42, 0.22, 500, 'bandpass', 3000, 1.5)),
+  };
+
+  /* --- циклы --- */
+  const stopBus = (bus, tail = 0.12) => {
+    if (!bus) return;
+    bus.gain.cancelScheduledValues(ctx.currentTime);
+    bus.gain.setTargetAtTime(0, ctx.currentTime, tail / 3);
+    setTimeout(() => bus.disconnect(), tail * 1000 + 300);
+  };
+  const stopTrack = (tail) => {
+    clearInterval(timer); timer = null;
+    if (track) stopBus(track.bus, tail);
+    track = null;
+  };
+  const pump = () => {
+    if (!track) return;
+    const prev = out; out = track.bus;
+    while (track.nextAt < ctx.currentTime + 1.2) {
+      track.play(track.step, track.nextAt);
+      track.step++;
+      track.nextAt = track.startAt + track.step * track.stepDur;
+    }
+    out = prev;
+  };
+  const startTrack = (name, stepDur, vol, play, fadeIn = 0) => {
+    stopTrack();
+    if (!ctx) return;
+    const bus = ctx.createGain();
+    bus.gain.setValueAtTime(fadeIn ? 0.0001 : vol, ctx.currentTime);
+    if (fadeIn) bus.gain.linearRampToValueAtTime(vol, ctx.currentTime + fadeIn);
+    bus.connect(master);
+    const startAt = ctx.currentTime + 0.08;
+    track = { name, bus, stepDur, play, step: 0, startAt, nextAt: startAt };
+    pump();
+    timer = setInterval(pump, 150);
+  };
+
+  // музыка меню: спокойная, мелодичная, восьмые при 92 ударах
+  const MENU_LEAD = [
+    'E5 . G5 A5 . G5 E5 .', 'C5 . E5 G5 . E5 D5 .', 'A4 . C5 D5 . C5 A4 .', 'B4 . D5 G5 - . . .',
+    'E5 . G5 A5 . C6 A5 .', 'G5 . E5 D5 . E5 G5 .', 'A5 . G5 E5 . D5 C5 .', 'D5 . E5 C5 - . . .',
+  ].map((b) => b.split(' '));
+  const MENU_CHORDS = [[36, 64, 67, 71], [33, 60, 64, 67], [41, 60, 65, 69], [43, 59, 62, 67]];
+  const playMenu = (i, at) => {
+    const s = i % 8, bar = Math.floor(i / 8) % 8, ch = MENU_CHORDS[bar % 4];
+    const e = 60 / 92 / 2;
+    if (s === 0 || s === 4) tone('sine', hz(ch[0] + 12), at, e * 1.8, 0.2);
+    if (s === 0) ch.slice(1).forEach((n) => tone('triangle', hz(n), at, e * 7.5, 0.035, 0.8));
+    if (s % 2 === 1) tone('triangle', hz(ch[1 + (s >> 1) % 3] + 12), at, e * 0.9, 0.05, 0.1);
+    hiss(at, 0.03, s % 2 ? 0.035 : 0.02, 8000);
+    const note = MENU_LEAD[bar][s];
+    if (note !== '.' && note !== '-') {
+      let hold = 1;
+      while (s + hold < 8 && MENU_LEAD[bar][s + hold] === '-') hold++;
+      const f = hz(m(note));
+      // звук вроде маримбы
+      tone('sine', f, at, e * hold * 1.3, 0.2, 0.1);
+      tone('sine', f * 4, at, 0.06, 0.035, 0.1);
+    }
+  };
+
+  // подбор: мягкий локатор и тихий счётчик
+  const playSearch = (i, at) => {
+    const s = i % 8;
+    if (s === 0) {
+      glide('sine', 1560, 1240, at, 0.32, 0.16);
+      glide('sine', 1560, 1240, at + 0.2, 0.3, 0.05);
+    }
+    hiss(at, 0.02, s % 2 ? 0.03 : 0.06, 5000);
+    if (s % 4 === 2) tone('sine', 98, at, 0.16, 0.22, 0.2);
+  };
+  // экран команд: нарастающая дробь
+  const playVersus = (i, at) => {
+    if (i % 4 === 0) glide('sine', 130, 55, at, 0.17, 0.4);
+    const rise = Math.min(1, i / 40);
+    if (i % 2 === 0 || rise > 0.5) hiss(at, 0.05, 0.03 + rise * 0.08, 2400 + rise * 2500);
+    if (i % 8 === 6) tone('square', hz(48 + Math.floor(rise * 12)), at, 0.16, 0.05);
+  };
+
+  // финальный трек
+  const LEAD = [
+    'E5 G5 C6 - B5 G5 E5 -', 'D5 G5 B5 - A5 G5 D5 .',
+    'C5 E5 A5 - G5 E5 C5 .', 'A4 C5 F5 A5 G5 - E5 -',
+    'G5 G5 A5 G5 E5 - C5 E5', 'D5 D5 E5 G5 B5 - A5 G5',
+    'A5 B5 C6 A5 G5 E5 D5 C5', 'F5 A5 G5 B5 D6 - - .',
+  ].map((b) => b.split(' '));
+  const CHORDS = ['C', 'G', 'Am', 'F', 'C', 'G', 'Am', 'G'];
+  const CHORD_NOTES = {
+    C: [48, 60, 64, 67, 72], G: [43, 59, 62, 67, 71],
+    Am: [45, 60, 64, 69, 72], F: [41, 60, 65, 69, 72],
+  };
+  const playLove = (i, at) => {
+    const STEP = LOVE_SPB / 4;
+    const s = i % 16, bar = Math.floor(i / 16) % 8;
+    const chord = CHORD_NOTES[CHORDS[bar]];
+    if (s % 4 === 0) glide('sine', 150, 45, at, 0.17, 0.5);
+    if (s === 4 || s === 12) hiss(at, 0.14, 0.2, 1400);
+    if (s % 2 === 0) hiss(at, s % 4 === 2 ? 0.07 : 0.03, s % 4 === 2 ? 0.1 : 0.05, 7000);
+    if (s % 4 === 2) tone('triangle', hz(chord[0]), at, STEP * 2.2, 0.34);
+    if (s % 8 === 0) tone('triangle', hz(chord[0]), at, STEP * 1.6, 0.26);
+    tone('square', hz(chord[1 + (s % 4)] + 12), at, STEP * 0.7, 0.035);
+    if (s % 2 === 0) {
+      const line = LEAD[bar], idx = s / 2, note = line[idx];
+      if (note !== '-' && note !== '.') {
+        let hold = 1;
+        while (idx + hold < 8 && line[idx + hold] === '-') hold++;
+        const f = hz(m(note));
+        tone('square', f, at, STEP * 2 * hold * 0.92, 0.17);
+        tone('triangle', f * 2, at, STEP * 2 * hold * 0.7, 0.07);
+      }
+    }
+  };
+
+  /* --- сцены кота --- */
+  const newScene = () => {
+    if (!ctx) return null;
+    stopBus(sceneBus);
+    sceneBus = ctx.createGain();
+    sceneBus.connect(master);
+    return sceneBus;
+  };
+  const applyMute = () => { if (master) master.gain.setTargetAtTime(muted ? 0 : 0.85, ctx.currentTime, 0.02); };
+  const sync = () => {
+    if (!ctx) return;
+    if (wanted && ctx.state !== 'running') ctx.resume().catch(() => {});
+    if (!wanted && ctx.state === 'running') ctx.suspend().catch(() => {});
+  };
+
+  // iOS может приостановить звук после звонка или сворачивания, возвращаем при следующем касании
+  addEventListener('pointerup', sync);
+  addEventListener('touchend', sync, { passive: true });
+
+  return {
+    fx,
+    get muted() { return muted; },
+    /* вызывать только из обработчика нажатия, иначе iOS не включит звук */
+    unlock() {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      // звук играет даже при выключенном переключателе «Без звука» (iOS 17 и новее)
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+      if (!ctx) {
+        ctx = new AC();
+        noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+        const d = noise.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        master = ctx.createGain();
+        decodeClips();
+        master.gain.value = muted ? 0 : 0.85;
+        master.connect(ctx.createDynamicsCompressor()).connect(ctx.destination);
+        sfxBus = ctx.createGain();
+        sfxBus.connect(master);
+        out = sfxBus;
+        // пустой буфер окончательно разблокирует звук на iOS
+        const silent = ctx.createBufferSource();
+        silent.buffer = ctx.createBuffer(1, 1, 22050);
+        silent.connect(ctx.destination);
+        silent.start(0);
+      }
+      ctx.resume().catch(() => {});
+    },
+    menu() { startTrack('menu', 60 / 92 / 2, 0.75, playMenu, 1.2); },
+    search() { startTrack('search', 60 / 100 / 2, 0.9, playSearch); },
+    versus() { startTrack('versus', 0.13, 0.9, playVersus); },
+    love() {
+      fallback = clock.elapsedTime;
+      startTrack('love', LOVE_SPB / 4, 1, playLove);
+    },
+    stopMusic(tail = 0.25) { stopTrack(tail); },
+    sceneSad() {
+      const bus = newScene();
+      onBus(bus, (t) => {
+        hiss(t + 0.05, 0.3, 0.1, 1200, 'bandpass', 2200, 2);       // шмыгает носом
+        [58, 57, 56].forEach((n, i) => brass(n, t + 0.3 + i * 0.44, 0.42, 0.3));
+        brass(55, t + 0.3 + 3 * 0.44, 1.3, 0.3, true);
+        clip('sad', t + 2.7, { rate: 0.88, vol: 0.9 });
+        sob(t + 4.1);
+      });
+    },
+    sceneHappy() {
+      fx.whoosh();
+      const bus = newScene();
+      onBus(bus, (t) => {
+        clip('happy1', t + 0.32, { rate: 1.08 });
+        clip('happy2', t + 1.05);
+        clip('purr', t + 1.6);
+      });
+    },
+    endScene() { if (sceneBus) stopBus(sceneBus, 0.35); sceneBus = null; },
+    stopAll() { this.stopMusic(0.1); this.endScene(); },
+    setMuted(v) {
+      muted = v;
+      try { localStorage.setItem('meow-muted', v ? '1' : '0'); } catch {}
+      applyMute();
+    },
+    /* сворачивание сайта или вертикальный экран: глушим, чтобы не играло в кармане */
+    setActive(v) { wanted = v; sync(); },
+    // текущая доля финального трека, по ней танцует кот
+    beat(t) {
+      if (ctx && ctx.state === 'running' && track && track.name === 'love') return Math.max(0, (ctx.currentTime - track.startAt) / LOVE_SPB);
+      return (t - fallback) / LOVE_SPB;
+    },
+  };
+})();
+
+/* ---------- сцена с табличками и финал ---------- */
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const fade = $('fade');
+function setFade(on, ms = 400) {
+  fade.style.setProperty('--d', ms + 'ms');
+  fade.classList.toggle('on', on);
+}
+function setTargets(values) {
+  MORPHS.forEach((n) => { dir.target[n] = values[n] || 0; });
+}
+function setTint(name) {
+  document.querySelectorAll('#bg .tint').forEach((el) => {
+    el.classList.toggle('on', el.classList.contains(name));
+  });
+}
+function signIn(sign) {
+  placeSign(sign);
+  sign.visible = true;
+  sign.position.y = SIGN_Y - 1.5;
+  tween(0.55, (k) => {
+    const e = easeBack(k);
+    sign.position.y = SIGN_Y - 1.5 * (1 - e);
+    sign.scale.setScalar(0.7 + 0.3 * e);
+  });
+}
+function signToss(sign) {
+  tween(0.55, (k) => {
+    sign.position.set(1.5 * k, SIGN_Y + 0.5 * Math.sin(k * Math.PI) - 2.4 * k * k, SIGN_Z + 0.2 * k);
+    sign.rotation.z = -1.5 * k;
+    if (k === 1) sign.visible = false;
+  });
+}
+
+async function playFinale(alive) {
+  setFade(true, 350);
+  await sleep(380);
+  if (!alive()) return;
+
+  // грустный котёнок и первая табличка
+  match.hidden = true;
+  hud.classList.add('off');
+  state.paused = false;
+  state.yaw = 0; state.yawV = 0;
+  dir.mode = 'sad';
+  snapCamera();
+  setTint('sad');
+  setTargets({ sad: 1, nod: 0.3, pawL: 1, pawR: 1 });
+  podium.position.y = -0.52;   // табличка стоит на подиуме и не прячется за ним
+  dir.w = { ...dir.target };
+  signIn(signSorry);
+  audio.sceneSad();
+  $('sceneStatus').textContent = 'Извините, но я не умею сражаться, у меня лапки(';
+  setFade(false, 450);
+  await sleep(6000);
+  if (!alive()) return;
+
+  // меняет табличку
+  dir.mode = 'smile';
+  setTint('none');
+  setTargets({ smile: 1, nod: 0.05, pawL: 1, pawR: 1 });
+  signToss(signSorry);
+  audio.sceneHappy();
+  hop(2.6);
+  setTimeout(() => { if (alive()) signIn(signSurprise); }, 280);
+  $('sceneStatus').textContent = 'Зато у меня есть кое что еще!';
+  await sleep(4800);
+  if (!alive()) return;
+
+  // экран гаснет
+  audio.endScene();
+  setFade(true, 600);
+  await sleep(1700);
+  if (!alive()) return;
+
+  // танец
+  signSorry.visible = signSurprise.visible = false;
+  podium.visible = false;
+  hearts.visible = true;
+  lastBeat = -1;
+  dir.mode = 'dance';
+  snapCamera();
+  setTint('love');
+  setTargets({ smile: 1 });
+  $('finale').hidden = false;
+  $('sceneStatus').textContent = 'Я люблю тебя!';
+  audio.love();
+  setFade(false, 260);
+  $('finaleLobby').focus({ preventScroll: true });
+}
+
+function resetScene() {
+  tweens.clear();
+  audio.stopAll();
+  dir.mode = 'lobby';
+  setTargets({});
+  dir.w = { ...dir.target };
+  signSorry.visible = signSurprise.visible = false;
+  tears.forEach((m) => { m.visible = false; });
+  hearts.visible = false;
+  heartData.forEach((h) => { h.life = 0; });
+  podium.visible = true;
+  podium.position.y = 0;
+  state.yaw = 0; state.yawV = 0;
+  setTint('none');
+  setFade(false, 200);
+  $('finale').hidden = true;
+  $('sceneStatus').textContent = '';
+  hud.classList.remove('off');
+  snapCamera();
+}
+
+/* ---------- загрузка матча ---------- */
+const TEAM_US = [
+  { name: 'Любимая', pts: '12 480', me: true, pic: 'assets/lubimi.jpg' },
+  { name: 'Барсик', pts: '9 310', hue: 95 },
+  { name: 'Мурка', pts: '11 052', hue: 300 },
+];
+const TEAM_THEM = [
+  { name: 'Рыжик', pts: '10 774', hue: 335 },
+  { name: 'Пушок', pts: '8 926', hue: 190 },
+  { name: 'Снежок', pts: '12 105', hue: 245 },
+];
+const STATUSES = [
+  [0, 'Подключаемся к арене'],
+  [28, 'Разматываем клубки'],
+  [55, 'Точим когти'],
+  [80, 'Прячем пылесос'],
+];
+let run = 0;   // при отмене старые таймеры перестают что-либо делать
+const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? ms * 0.5 : ms));
+
+function fighterCard(p) {
+  const el = document.createElement('div');
+  el.className = 'fighter' + (p.me ? ' me' : '');
+  const pic = document.createElement('div');
+  pic.className = 'pic';
+  const img = document.createElement('img');
+  img.alt = '';
+  img.src = p.pic || catPic;
+  if (p.hue) img.style.filter = `hue-rotate(${p.hue}deg) saturate(1.15)`;
+  const tick = document.createElement('span');
+  tick.className = 'tick';
+  tick.innerHTML = '<svg class="icon"><use href="#i-check"/></svg>';
+  pic.append(img, tick);
+  const who = document.createElement('div');
+  who.className = 'who outlined';
+  who.textContent = p.name;
+  const pts = document.createElement('div');
+  pts.className = 'trophies';
+  pts.innerHTML = '<svg class="icon"><use href="#i-paw"/></svg>';
+  pts.append(p.pts);
+  el.append(pic, who, pts);
+  return el;
+}
+
+async function startMatch() {
+  if (!match.hidden) return;
+  const id = ++run;
+  const alive = () => id === run;
+
+  $('search').hidden = false;
+  $('versus').hidden = true;
+  showOverlay(match);
+  $('cancelBtn').focus();
+  audio.search();
+
+  // поиск соперников
+  const slots = $('slots');
+  slots.replaceChildren();
+  for (let i = 0; i < 6; i++) {
+    const s = document.createElement('div');
+    s.className = 'slot';
+    s.innerHTML = '<svg class="icon"><use href="#i-paw"/></svg>';
+    slots.append(s);
+  }
+  slots.children[0].classList.add('on');
+  $('foundCount').textContent = '1';
+  for (const [i, ms] of [[1, 650], [2, 420], [3, 780], [4, 360], [5, 620]]) {
+    await wait(ms);
+    if (!alive()) return;
+    slots.children[i].classList.add('on');
+    $('foundCount').textContent = i + 1;
+    audio.fx.found(i);
+  }
+  await wait(450);
+  if (!alive()) return;
+
+  // экран команд
+  audio.versus();
+  audio.fx.matchFound();
+  setTimeout(() => { if (alive()) audio.fx.stamp(); }, reduceMotion ? 0 : 330);
+  const fill = (root, list) => {
+    root.querySelectorAll('.fighter').forEach((n) => n.remove());
+    list.forEach((p) => root.append(fighterCard(p)));
+  };
+  fill($('teamOurs'), TEAM_US);
+  fill($('teamTheirs'), TEAM_THEM);
+  $('search').hidden = true;
+  $('versus').hidden = false;
+
+  const fighters = [...match.querySelectorAll('.fighter')];
+  const readyAt = [14, 62, 38, 26, 84, 50];
+  const start = performance.now();
+  const duration = reduceMotion ? 2500 : 5200;
+  await new Promise((done) => {
+    const step = (now) => {
+      if (!alive()) return done();
+      const k = Math.min(1, (now - start) / duration);
+      // загрузка идёт рывками, как настоящая
+      const pct = Math.round(100 * (k + Math.sin(k * Math.PI * 6) * 0.03 * (1 - k)));
+      const shown = Math.max(0, Math.min(100, pct));
+      $('loadFill').style.width = shown + '%';
+      $('loadPct').textContent = shown + '%';
+      const label = STATUSES.filter(([at]) => shown >= at).pop()[1];
+      if ($('loadStatus').textContent !== label) $('loadStatus').textContent = label;
+      fighters.forEach((f, i) => {
+        const on = shown >= readyAt[i];
+        if (on && !f.classList.contains('ready')) audio.fx.ready();
+        f.classList.toggle('ready', on);
+      });
+      if (k < 1) requestAnimationFrame(step); else done();
+    };
+    requestAnimationFrame(step);
+  });
+  if (!alive()) return;
+
+  $('loadStatus').textContent = 'Все готовы!';
+  audio.stopMusic(0.5);
+  await sleep(800);
+  if (!alive()) return;
+  await playFinale(alive);
+}
+
+function leaveMatch() {
+  run++;
+  resetScene();
+  hideOverlay(match, $('playBtn'));
+  audio.menu();
+  hop();
+}
+$('playBtn').addEventListener('click', () => {
+  audio.unlock();
+  audio.stopMusic(0.2);
+  audio.fx.play();
+  hop(3.4);
+  setTimeout(startMatch, reduceMotion ? 0 : 260);
+});
+$('cancelBtn').addEventListener('click', leaveMatch);
+$('finaleLobby').addEventListener('click', leaveMatch);
+function applyMuteUi() {
+  const off = audio.muted;
+  $('soundBtn').setAttribute('aria-pressed', off);
+  $('soundBtn').querySelector('span').textContent = off ? 'Включить звук' : 'Выключить звук';
+  $('muteBtn').setAttribute('aria-pressed', off);
+  $('muteBtn').setAttribute('aria-label', off ? 'Включить звук' : 'Выключить звук');
+  $('muteBtn').querySelector('use').setAttribute('href', off ? '#i-mute' : '#i-sound');
+}
+for (const id of ['soundBtn', 'muteBtn']) {
+  $(id).addEventListener('click', () => { audio.setMuted(!audio.muted); applyMuteUi(); });
+}
+applyMuteUi();
+
+// звук нажатия у всех кнопок: у «Играть» и «Начать» свои
+function buttonSound(btn) {
+  if (btn.id === 'playBtn' || btn.id === 'startBtn') return;
+  if (btn.hasAttribute('data-soon')) audio.fx.nope();
+  else audio.fx.click();
+}
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (btn) buttonSound(btn);
+});
+
+// глушим, когда сайт свёрнут или телефон стоит вертикально
+function updateActivity() {
+  const needRotate = isTouch && innerHeight > innerWidth;
+  document.documentElement.classList.toggle('need-rotate', needRotate);
+  state.rotate = needRotate;
+  audio.setActive(!needRotate && !document.hidden);
+}
+addEventListener('resize', updateActivity);
+addEventListener('orientationchange', () => setTimeout(updateActivity, 350));
+document.addEventListener('visibilitychange', updateActivity);
+updateActivity();
+// iOS игнорирует запрет масштабирования в метатеге
+for (const name of ['gesturestart', 'gesturechange', 'gestureend']) {
+  document.addEventListener(name, (e) => e.preventDefault());
+}
+
+addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (!profile.hidden) hideOverlay(profile, $('accountBtn'));
+  else if (!match.hidden || dir.mode !== 'lobby') leaveMatch();
+});
+
+/* ---------- старт ---------- */
+// нажатие нужно браузеру, чтобы разрешить звук
+$('startBtn').addEventListener('click', () => {
+  audio.unlock();
+  audio.fx.start();
+  audio.menu();
+  $('boot').classList.add('gone');
+  setTimeout(() => $('boot').remove(), 400);
+  setTimeout(() => hop(2.6), 450);
+});
+
+(async () => {
+  try {
+    await new Promise((r) => setTimeout(r, 30)); // даём заставке отрисоваться
+    frameCamera();
+    await loadCat();
+    catPic = snapshotCat();
+    document.querySelectorAll('.js-cat').forEach((i) => { i.src = catPic; });
+    tick();
+    $('bootMsg').textContent = 'Котёнок проснулся и ждёт';
+    $('startBtn').hidden = false;
+    $('startBtn').focus({ preventScroll: true });
+  } catch (err) {
+    console.error(err);
+    $('bootMsg').textContent = 'Котёнок не проснулся: ' + err.message + '. Проверь интернет и обнови страницу.';
+  }
+})();
+</script>
+<script nomodule>document.getElementById('bootMsg').textContent = 'Нужен браузер поновее.';</script>
+</body>
+</html>
